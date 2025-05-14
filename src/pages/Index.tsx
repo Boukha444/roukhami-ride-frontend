@@ -1,12 +1,56 @@
 
 import { Link } from "react-router-dom";
-import { ChevronRight, Car, Shield, Clock, CreditCard } from "lucide-react";
+import { ChevronRight, Car, Shield, Clock, CreditCard, Star, StarHalf } from "lucide-react";
 import { cars } from "@/lib/carsData";
 import CarCard from "@/components/CarCard";
 
 const Index = () => {
   // Get 3 featured cars for the homepage
   const featuredCars = cars.slice(0, 3);
+
+  // Testimonial data with ratings
+  const testimonials = [
+    {
+      id: 1,
+      text: "Excellent service, voiture propre et en parfait état. La prise en charge à l'aéroport a été très rapide. Je recommande !",
+      name: "Mohammed A.",
+      location: "Casablanca",
+      rating: 5
+    },
+    {
+      id: 2,
+      text: "Très satisfaite de ma location. Le personnel est professionnel et à l'écoute. Voiture récente et prix raisonnable.",
+      name: "Samira L.",
+      location: "Marrakech",
+      rating: 4.5
+    },
+    {
+      id: 3,
+      text: "Deuxième fois que je loue chez ROUKHAMI CAR et toujours aussi satisfait. Service fiable et véhicules impeccables.",
+      name: "Karim B.",
+      location: "Tanger",
+      rating: 5
+    }
+  ];
+
+  // Helper function to render stars based on rating
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+    
+    // Add full stars
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={`star-${i}`} className="h-5 w-5 fill-amber-400 text-amber-400" />);
+    }
+    
+    // Add half star if needed
+    if (hasHalfStar) {
+      stars.push(<StarHalf key="half-star" className="h-5 w-5 fill-amber-400 text-amber-400" />);
+    }
+    
+    return stars;
+  };
 
   return (
     <>
@@ -129,35 +173,26 @@ const Index = () => {
           <h2 className="text-3xl font-bold mb-12">Ce que nos clients disent</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-              <p className="mb-4 text-gray-600 dark:text-gray-300">
-                "Excellent service, voiture propre et en parfait état. La prise en charge à l'aéroport a été très rapide. Je recommande !"
-              </p>
-              <div>
-                <p className="font-semibold">Mohammed A.</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Casablanca</p>
+            {testimonials.map((testimonial) => (
+              <div 
+                key={testimonial.id}
+                className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
+              >
+                <div className="flex justify-center mb-4">
+                  {renderStars(testimonial.rating)}
+                </div>
+                <p className="mb-6 text-gray-600 dark:text-gray-300 italic">
+                  "{testimonial.text}"
+                </p>
+                <div className="mt-auto">
+                  <div className="h-12 w-12 rounded-full bg-gray-200 mx-auto mb-3 flex items-center justify-center">
+                    <span className="text-lg font-bold">{testimonial.name.charAt(0)}</span>
+                  </div>
+                  <p className="font-semibold text-roukhami-blue">{testimonial.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.location}</p>
+                </div>
               </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-              <p className="mb-4 text-gray-600 dark:text-gray-300">
-                "Très satisfaite de ma location. Le personnel est professionnel et à l'écoute. Voiture récente et prix raisonnable."
-              </p>
-              <div>
-                <p className="font-semibold">Samira L.</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Marrakech</p>
-              </div>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
-              <p className="mb-4 text-gray-600 dark:text-gray-300">
-                "Deuxième fois que je loue chez ROUKHAMI CAR et toujours aussi satisfait. Service fiable et véhicules impeccables."
-              </p>
-              <div>
-                <p className="font-semibold">Karim B.</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Tanger</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
