@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { Calendar, MapPin, Upload, WhatsApp } from "lucide-react";
+import { Calendar, MapPin, Upload, MessageSquare } from "lucide-react";
 import { cars } from "@/lib/carsData";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -252,7 +252,7 @@ Merci!`;
           className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3"
           onClick={handleWhatsAppBooking}
         >
-          <WhatsApp className="h-5 w-5" />
+          <MessageSquare className="h-5 w-5" />
           <span>Réserver via WhatsApp</span>
         </Button>
         

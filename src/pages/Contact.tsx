@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, WhatsApp } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 
 const Contact = () => {
@@ -98,7 +97,7 @@ const Contact = () => {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-md w-full md:w-auto"
               >
-                <WhatsApp className="h-5 w-5" />
+                <MessageSquare className="h-5 w-5" />
                 <span>Contacter sur WhatsApp</span>
               </a>
               
