@@ -11,7 +11,8 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const availableLanguages = [
+// Define available languages with proper typing
+export const availableLanguages: { code: Language; name: string }[] = [
   { code: 'fr', name: 'Français' },
   { code: 'en', name: 'English' },
   { code: 'de', name: 'Deutsch' },
