@@ -14,6 +14,15 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
+// Admin imports
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
+import AdminCars from "./pages/admin/Cars";
+import Bookings from "./pages/admin/Bookings";
+import Customers from "./pages/admin/Customers";
+import Documents from "./pages/admin/Documents";
+import Settings from "./pages/admin/Settings";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -23,20 +32,67 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1 pt-16">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/cars" element={<Cars />} />
-                <Route path="/booking" element={<Booking />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
+          <Routes>
+            {/* Public Routes */}
+            <Route path="/" element={
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 pt-16">
+                  <Index />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/cars" element={
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 pt-16">
+                  <Cars />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/booking" element={
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 pt-16">
+                  <Booking />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/about" element={
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 pt-16">
+                  <About />
+                </main>
+                <Footer />
+              </div>
+            } />
+            <Route path="/contact" element={
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="flex-1 pt-16">
+                  <Contact />
+                </main>
+                <Footer />
+              </div>
+            } />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="cars" element={<AdminCars />} />
+              <Route path="bookings" element={<Bookings />} />
+              <Route path="customers" element={<Customers />} />
+              <Route path="documents" element={<Documents />} />
+              <Route path="settings" element={<Settings />} />
+            </Route>
+            
+            {/* Not Found Route */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </LanguageProvider>
     </TooltipProvider>
