@@ -1,9 +1,8 @@
-
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bar } from "recharts";
-import { BarChart } from "@/components/ui/chart";
+import { Bar, BarChart, ResponsiveContainer } from "recharts";
 import { Car, Calendar, Users, FileText } from "lucide-react";
+import { ChartContainer } from "@/components/ui/chart";
 
 const Dashboard = () => {
   // Mock data for the chart
@@ -82,32 +81,30 @@ const Dashboard = () => {
           <CardTitle>Booking Sources</CardTitle>
         </CardHeader>
         <CardContent className="pl-2">
-          <BarChart
-            data={bookingData}
-            height={350}
-            xAxis={
-              {
-                dataKey: "name",
-                tickLine: false,
-                axisLine: false,
-                fontSize: 12
-              }
-            }
-            className="mt-4"
+          <ChartContainer
+            config={{
+              whatsapp: { color: "#25D366" },
+              direct: { color: "#4F46E5" }
+            }} 
+            className="h-[350px]"
           >
-            <Bar
-              dataKey="whatsapp"
-              name="WhatsApp"
-              fill="#25D366"
-              radius={[4, 4, 0, 0]}
-            />
-            <Bar
-              dataKey="direct"
-              name="Direct"
-              fill="#4F46E5"
-              radius={[4, 4, 0, 0]}
-            />
-          </BarChart>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={bookingData}>
+                <Bar
+                  dataKey="whatsapp"
+                  name="WhatsApp"
+                  fill="var(--color-whatsapp, #25D366)"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar
+                  dataKey="direct"
+                  name="Direct"
+                  fill="var(--color-direct, #4F46E5)"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
         </CardContent>
       </Card>
     </div>
