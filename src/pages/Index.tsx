@@ -36,7 +36,29 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Features Section */}
+      {/* Featured Cars Section - Now first after hero */}
+      <section className="py-16">
+        <div className="container-custom">
+          <div className="flex justify-between items-center mb-10">
+            <h2 className="text-3xl font-bold">Nos véhicules populaires</h2>
+            <Link 
+              to="/cars" 
+              className="flex items-center text-roukhami-blue font-medium hover:underline"
+            >
+              Voir tous
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Link>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {featuredCars.map((car) => (
+              <CarCard key={car.id} car={car} />
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Features Section - Now second after featured cars */}
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="container-custom text-center">
           <h2 className="text-3xl font-bold mb-12">Pourquoi choisir ROUKHAMI CAR</h2>
@@ -81,28 +103,6 @@ const Index = () => {
                 Nous vous proposons des tarifs attractifs avec des options flexibles selon vos besoins.
               </p>
             </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Featured Cars Section */}
-      <section className="py-16">
-        <div className="container-custom">
-          <div className="flex justify-between items-center mb-10">
-            <h2 className="text-3xl font-bold">Nos véhicules populaires</h2>
-            <Link 
-              to="/cars" 
-              className="flex items-center text-roukhami-blue font-medium hover:underline"
-            >
-              Voir tous
-              <ChevronRight className="h-4 w-4 ml-1" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
           </div>
         </div>
       </section>
