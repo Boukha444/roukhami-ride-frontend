@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,27 +33,31 @@ export default function Header() {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-4">
           <Link to="/" className="font-medium hover:text-roukhami-blue transition-colors">
-            Accueil
+            {t('header.home')}
           </Link>
           <Link to="/cars" className="font-medium hover:text-roukhami-blue transition-colors">
-            Voitures
+            {t('header.cars')}
           </Link>
           <Link to="/about" className="font-medium hover:text-roukhami-blue transition-colors">
-            À Propos
+            {t('header.about')}
           </Link>
           <Link to="/contact" className="font-medium hover:text-roukhami-blue transition-colors">
-            Contact
+            {t('header.contact')}
           </Link>
           <Link to="/booking" className="btn-primary">
-            Réservez
+            {t('header.book')}
           </Link>
-          <ThemeToggle />
+          <div className="flex items-center space-x-2">
+            <LanguageSwitcher />
+            <ThemeToggle />
+          </div>
         </nav>
         
         {/* Mobile menu button */}
         <div className="flex items-center md:hidden">
+          <LanguageSwitcher />
           <ThemeToggle />
           <button
             className="ml-2 p-2"
@@ -71,35 +78,35 @@ export default function Header() {
               className="font-medium hover:text-roukhami-blue transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              Accueil
+              {t('header.home')}
             </Link>
             <Link 
               to="/cars" 
               className="font-medium hover:text-roukhami-blue transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              Voitures
+              {t('header.cars')}
             </Link>
             <Link 
               to="/about" 
               className="font-medium hover:text-roukhami-blue transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              À Propos
+              {t('header.about')}
             </Link>
             <Link 
               to="/contact" 
               className="font-medium hover:text-roukhami-blue transition-colors py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              Contact
+              {t('header.contact')}
             </Link>
             <Link 
               to="/booking" 
               className="btn-primary text-center"
               onClick={() => setIsMenuOpen(false)}
             >
-              Réservez
+              {t('header.book')}
             </Link>
           </nav>
         </div>

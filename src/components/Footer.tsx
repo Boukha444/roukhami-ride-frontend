@@ -1,8 +1,12 @@
 
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Instagram, Facebook, Twitter } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="bg-gray-100 dark:bg-gray-900 pt-12 pb-8">
       <div className="container-custom">
@@ -11,7 +15,7 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4 text-roukhami-blue">ROUKHAMI CAR</h3>
             <p className="mb-4 dark:text-gray-300">
-              Votre partenaire de confiance pour la location de voitures au Maroc. Des véhicules de qualité à des prix compétitifs.
+              {t('footer.description')}
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-500 hover:text-roukhami-blue" aria-label="Facebook">
@@ -28,26 +32,26 @@ export default function Footer() {
           
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Liens Rapides</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.quickLinks')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-gray-600 dark:text-gray-300 hover:text-roukhami-blue dark:hover:text-roukhami-blue">
-                  Accueil
+                  {t('header.home')}
                 </Link>
               </li>
               <li>
                 <Link to="/cars" className="text-gray-600 dark:text-gray-300 hover:text-roukhami-blue dark:hover:text-roukhami-blue">
-                  Nos Voitures
+                  {t('header.cars')}
                 </Link>
               </li>
               <li>
                 <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-roukhami-blue dark:hover:text-roukhami-blue">
-                  À Propos
+                  {t('header.about')}
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="text-gray-600 dark:text-gray-300 hover:text-roukhami-blue dark:hover:text-roukhami-blue">
-                  Contact
+                  {t('header.contact')}
                 </Link>
               </li>
             </ul>
@@ -55,7 +59,7 @@ export default function Footer() {
           
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Contact</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.contact')}</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-roukhami-blue shrink-0 mt-0.5" />
@@ -76,17 +80,17 @@ export default function Footer() {
           
           {/* Opening Hours */}
           <div>
-            <h3 className="text-lg font-semibold mb-4">Heures d'Ouverture</h3>
+            <h3 className="text-lg font-semibold mb-4">{t('footer.hours')}</h3>
             <ul className="space-y-2">
-              <li className="text-gray-600 dark:text-gray-300">Lun - Ven: 8:00 - 19:00</li>
-              <li className="text-gray-600 dark:text-gray-300">Samedi: 9:00 - 17:00</li>
-              <li className="text-gray-600 dark:text-gray-300">Dimanche: 10:00 - 14:00</li>
+              <li className="text-gray-600 dark:text-gray-300">{t('contact.info.hours.weekdays')}</li>
+              <li className="text-gray-600 dark:text-gray-300">{t('contact.info.hours.saturday')}</li>
+              <li className="text-gray-600 dark:text-gray-300">{t('contact.info.hours.sunday')}</li>
             </ul>
           </div>
         </div>
         
         <div className="border-t border-gray-200 dark:border-gray-800 mt-10 pt-6 text-center text-gray-500 dark:text-gray-400">
-          <p>&copy; {new Date().getFullYear()} ROUKHAMI CAR. Tous droits réservés.</p>
+          <p>&copy; {currentYear} ROUKHAMI CAR. {t('footer.rights')}</p>
         </div>
       </div>
     </footer>

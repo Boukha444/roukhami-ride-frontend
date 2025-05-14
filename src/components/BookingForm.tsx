@@ -5,6 +5,7 @@ import { Calendar, MapPin, Upload, MessageSquare } from "lucide-react";
 import { cars } from "@/lib/carsData";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function BookingForm() {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ export default function BookingForm() {
   const [license, setLicense] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
+  const { t, language } = useLanguage();
 
   useEffect(() => {
     // Check if there's a car parameter in the URL
@@ -37,18 +39,33 @@ export default function BookingForm() {
     if (!validateForm()) return;
 
     // Format dates for better readability
-    const formattedStartDate = new Date(startDate).toLocaleDateString();
-    const formattedEndDate = new Date(endDate).toLocaleDateString();
+    const formattedStartDate = new Date(startDate).toLocaleDateString(language);
+    const formattedEndDate = new Date(endDate).toLocaleDateString(language);
 
-    // Create WhatsApp message
-    const message = `Bonjour! Je souhaite réserver une voiture:\n
-*Modèle:* ${selectedCar}\n
-*Nom:* ${name}\n
-*Téléphone:* ${phone}\n
-*Du:* ${formattedStartDate}\n
-*Au:* ${formattedEndDate}\n
-*Lieu de prise en charge:* ${pickupLocation}\n
-Merci!`;
+    // Create WhatsApp message based on language
+    let greeting = "";
+    switch(language) {
+      case 'en':
+        greeting = "Hello! I would like to book a car:";
+        break;
+      case 'de':
+        greeting = "Hallo! Ich möchte ein Auto buchen:";
+        break;
+      case 'es':
+        greeting = "¡Hola! Me gustaría reservar un coche:";
+        break;
+      default:
+        greeting = "Bonjour! Je souhaite réserver une voiture:";
+    }
+
+    const message = `${greeting}\n
+*${t('booking.form.carModel')}:* ${selectedCar}\n
+*${t('booking.form.fullName')}:* ${name}\n
+*${t('booking.form.phone')}:* ${phone}\n
+*${t('booking.form.startDate')}:* ${formattedStartDate}\n
+*${t('booking.form.endDate')}:* ${formattedEndDate}\n
+*${t('booking.form.pickupLocation')}:* ${pickupLocation}\n
+${language === 'fr' ? 'Merci!' : language === 'de' ? 'Danke!' : language === 'es' ? '¡Gracias!' : 'Thank you!'}`;
 
     // Encode for WhatsApp URL
     const encodedMessage = encodeURIComponent(message);
@@ -59,12 +76,12 @@ Merci!`;
 
   const validateForm = () => {
     if (!name || !phone || !startDate || !endDate || !pickupLocation || !selectedCar) {
-      toast.error("Veuillez remplir tous les champs");
+      toast.error(t('booking.validation.fillAllFields'));
       return false;
     }
     
     if (!license) {
-      toast.error("Veuillez télécharger une copie de votre permis de conduire");
+      toast.error(t('booking.validation.uploadLicense'));
       return false;
     }
     
@@ -72,7 +89,7 @@ Merci!`;
     const end = new Date(endDate);
     
     if (end <= start) {
-      toast.error("La date de fin doit être postérieure à la date de début");
+      toast.error(t('booking.validation.endDateAfterStart'));
       return false;
     }
     
@@ -89,7 +106,7 @@ Merci!`;
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       
-      toast.success("Réservation envoyée avec succès! Nous vous contacterons bientôt.");
+      toast.success(t('booking.validation.success'));
       
       // Reset form
       setName("");
@@ -99,7 +116,7 @@ Merci!`;
       setPickupLocation("");
       setLicense(null);
     } catch (error) {
-      toast.error("Une erreur s'est produite. Veuillez réessayer.");
+      toast.error(t('booking.validation.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -111,7 +128,7 @@ Merci!`;
         {/* Car Selection */}
         <div className="col-span-full">
           <label htmlFor="car" className="block text-sm font-medium mb-2">
-            Modèle de voiture
+            {t('booking.form.carModel')}
           </label>
           <select
             id="car"
@@ -120,7 +137,7 @@ Merci!`;
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-roukhami-blue"
             required
           >
-            <option value="">Sélectionnez un modèle</option>
+            <option value="">{t('booking.form.selectModel')}</option>
             {cars.map((car) => (
               <option key={car.id} value={car.name}>
                 {car.name} ({car.transmission})
@@ -132,7 +149,7 @@ Merci!`;
         {/* Name */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-2">
-            Nom complet
+            {t('booking.form.fullName')}
           </label>
           <input
             type="text"
@@ -147,7 +164,7 @@ Merci!`;
         {/* Phone */}
         <div>
           <label htmlFor="phone" className="block text-sm font-medium mb-2">
-            Numéro de téléphone
+            {t('booking.form.phone')}
           </label>
           <input
             type="tel"
@@ -162,7 +179,7 @@ Merci!`;
         {/* Start Date */}
         <div>
           <label htmlFor="startDate" className="block text-sm font-medium mb-2">
-            Date de début
+            {t('booking.form.startDate')}
           </label>
           <div className="relative">
             <input
@@ -181,7 +198,7 @@ Merci!`;
         {/* End Date */}
         <div>
           <label htmlFor="endDate" className="block text-sm font-medium mb-2">
-            Date de fin
+            {t('booking.form.endDate')}
           </label>
           <div className="relative">
             <input
@@ -200,7 +217,7 @@ Merci!`;
         {/* Pickup Location */}
         <div className="col-span-full">
           <label htmlFor="location" className="block text-sm font-medium mb-2">
-            Lieu de prise en charge
+            {t('booking.form.pickupLocation')}
           </label>
           <div className="relative">
             <input
@@ -218,7 +235,7 @@ Merci!`;
         {/* License Upload */}
         <div className="col-span-full">
           <label htmlFor="license" className="block text-sm font-medium mb-2">
-            Permis de conduire (PDF ou image)
+            {t('booking.form.license')}
           </label>
           <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-md p-4 text-center">
             <input
@@ -235,10 +252,10 @@ Merci!`;
             >
               <Upload className="h-8 w-8 text-gray-400" />
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                {license ? license.name : "Cliquez pour télécharger"}
+                {license ? license.name : t('booking.form.uploadLicense')}
               </span>
               <span className="text-xs text-gray-400">
-                PDF, JPG, PNG (Max 5MB)
+                {t('booking.form.fileTypes')}
               </span>
             </label>
           </div>
@@ -253,7 +270,7 @@ Merci!`;
           onClick={handleWhatsAppBooking}
         >
           <MessageSquare className="h-5 w-5" />
-          <span>Réserver via WhatsApp</span>
+          <span>{t('booking.form.viaWhatsApp')}</span>
         </Button>
         
         <Button
@@ -261,7 +278,7 @@ Merci!`;
           className="bg-roukhami-blue hover:bg-blue-500 text-white py-3"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Traitement en cours..." : "Réserver Maintenant"}
+          {isSubmitting ? t('booking.form.processing') : t('booking.form.bookNow')}
         </Button>
       </div>
     </form>
