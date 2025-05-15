@@ -31,11 +31,14 @@ const Cars = () => {
 
   return (
     <>
-      {/* Page Header */}
-      <section className="bg-gray-900 text-white py-16">
-        <div className="container-custom">
-          <h1 className="text-4xl font-bold mb-4">Nos Véhicules</h1>
-          <p className="text-lg max-w-2xl">
+      {/* Enhanced Page Header with Dark Background */}
+      <section className="bg-gray-900 text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-90"></div>
+        <div className="container-custom relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-gray-100 to-blue-100 bg-clip-text text-transparent">
+            Nos Véhicules
+          </h1>
+          <p className="text-lg max-w-2xl text-gray-200">
             Découvrez notre gamme diversifiée de véhicules pour répondre à tous vos besoins, des petites citadines économiques aux SUV spacieux.
           </p>
         </div>

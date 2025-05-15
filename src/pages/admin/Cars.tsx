@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import AddCarForm from "@/components/admin/AddCarForm";
+import { toast } from "sonner";
 
 // Mock car data
 const initialCars = [
@@ -52,6 +55,7 @@ const initialCars = [
 
 const Cars = () => {
   const [cars, setCars] = useState(initialCars);
+  const [isAddCarDialogOpen, setIsAddCarDialogOpen] = useState(false);
 
   const toggleStatus = (id: number) => {
     setCars(cars.map(car => 
@@ -64,17 +68,30 @@ const Cars = () => {
     ));
   };
 
+  const handleAddCar = (data: any) => {
+    const newCar = {
+      id: cars.length + 1,
+      name: data.name,
+      type: data.transmission,
+      status: data.isAvailable ? "Available" : "Not Available",
+      mileage: "0 km"
+    };
+    setCars([...cars, newCar]);
+    setIsAddCarDialogOpen(false);
+    toast.success(`${data.name} added successfully!`);
+  };
+
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Cars</h1>
-        <Button>
+        <h1 className="text-2xl sm:text-3xl font-bold">Cars</h1>
+        <Button onClick={() => setIsAddCarDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add New Car
         </Button>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -106,8 +123,17 @@ const Cars = () => {
                       variant="outline" 
                       size="sm"
                       onClick={() => toggleStatus(car.id)}
+                      className="hidden sm:inline-flex"
                     >
                       {car.status === "Available" ? "Mark as Rented" : "Mark as Available"}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => toggleStatus(car.id)}
+                      className="sm:hidden"
+                    >
+                      {car.status === "Available" ? "Rent" : "Available"}
                     </Button>
                     <Button variant="ghost" size="icon">
                       <Pencil className="h-4 w-4" />
@@ -122,6 +148,21 @@ const Cars = () => {
           </TableBody>
         </Table>
       </div>
+
+      {/* Add Car Dialog */}
+      <Dialog open={isAddCarDialogOpen} onOpenChange={setIsAddCarDialogOpen}>
+        <DialogContent className="sm:max-w-[90%] md:max-w-[800px] p-0 sm:p-6">
+          <DialogHeader className="p-6 sm:p-0">
+            <DialogTitle className="text-xl">Add New Car</DialogTitle>
+          </DialogHeader>
+          <div className="overflow-y-auto max-h-[80vh] px-6 pb-6 sm:px-0 sm:pb-0">
+            <AddCarForm 
+              onClose={() => setIsAddCarDialogOpen(false)} 
+              onSubmit={handleAddCar} 
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

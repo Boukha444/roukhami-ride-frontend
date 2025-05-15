@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, MessageSquare } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageSquare, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const Contact = () => {
@@ -31,11 +31,14 @@ const Contact = () => {
 
   return (
     <>
-      {/* Page Header */}
-      <section className="bg-gray-900 text-white py-16">
-        <div className="container-custom">
-          <h1 className="text-4xl font-bold mb-4">Contact</h1>
-          <p className="text-lg max-w-2xl">
+      {/* Enhanced Page Header with Dark Background */}
+      <section className="bg-gray-900 text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-90"></div>
+        <div className="container-custom relative z-10">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-gray-100 to-blue-100 bg-clip-text text-transparent">
+            Contact
+          </h1>
+          <p className="text-lg max-w-2xl text-gray-200">
             Besoin d'aide ou d'informations ? Nous sommes là pour vous. Contactez-nous par téléphone, e-mail ou en utilisant notre formulaire.
           </p>
         </div>
