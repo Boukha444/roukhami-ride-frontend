@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navigate, Outlet, useLocation, Link } from "react-router-dom";
 import {
   Sidebar,
@@ -32,40 +32,11 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 const AdminLayout = () => {
   const location = useLocation();
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const [notifications] = useState([
     { id: 1, text: "New booking request from Sophie Martin", time: "5 minutes ago" },
     { id: 2, text: "Driver's license uploaded by Martin Dupont", time: "1 hour ago" },
     { id: 3, text: "Booking approved for Lucas Petit", time: "3 hours ago" },
   ]);
-
-  // Track the current theme
-  useEffect(() => {
-    const checkTheme = () => {
-      const isDark = document.documentElement.classList.contains("dark");
-      setIsDarkMode(isDark);
-    };
-
-    // Initial check
-    checkTheme();
-
-    // Create a mutation observer to detect theme changes
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type === "attributes" &&
-          mutation.attributeName === "class"
-        ) {
-          checkTheme();
-        }
-      });
-    });
-
-    // Start observing the document element for class changes
-    observer.observe(document.documentElement, { attributes: true });
-
-    return () => observer.disconnect();
-  }, []);
 
   const navigationItems = [
     { 
@@ -136,22 +107,18 @@ const AdminLayout = () => {
         </Sidebar>
 
         <div className="flex flex-col flex-1 overflow-hidden">
-          {/* Top Navbar - with dynamic blue background based on theme */}
-          <header className={`flex h-14 items-center gap-4 px-4 lg:px-6 transition-colors duration-200 ${
-            isDarkMode 
-              ? "bg-blue-900 text-white border-b border-blue-800" 
-              : "bg-blue-600 text-white border-b border-blue-500"
-          }`}>
-            <SidebarTrigger className="text-white" />
+          {/* Top Navbar */}
+          <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
+            <SidebarTrigger />
             
             <div className="flex-1 flex items-center gap-2 md:gap-4">
               <form className="flex-1 hidden md:flex max-w-sm">
                 <div className="relative w-full">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-white/70" />
+                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                   <Input
                     type="search"
                     placeholder="Search..."
-                    className="w-full pl-8 bg-white/10 border-white/20 placeholder:text-white/70 text-white focus-visible:ring-white/30"
+                    className="w-full pl-8"
                   />
                 </div>
               </form>
@@ -160,7 +127,7 @@ const AdminLayout = () => {
             <div className="flex items-center gap-2">
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative text-white hover:bg-white/10">
+                  <Button variant="ghost" size="icon" className="relative">
                     <Bell className="h-5 w-5" />
                     <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-600"></span>
                   </Button>
@@ -184,7 +151,7 @@ const AdminLayout = () => {
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
+                  <Button variant="ghost" size="icon">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
