@@ -70,7 +70,7 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmitForm)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmitForm)} className="space-y-6 max-w-3xl mx-auto px-4 sm:px-6">
         {/* Image Upload */}
         <div className="space-y-2">
           <FormLabel>Car Image</FormLabel>
@@ -84,7 +84,7 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
                   type="button"
                   variant="outline"
                   size="sm"
-                  className="mt-2"
+                  className="mt-4"
                   onClick={() => {
                     setImagePreview(null);
                     form.setValue("image", undefined);
@@ -94,9 +94,9 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-4">
+              <div className="flex flex-col items-center justify-center py-6 sm:py-8">
                 <Upload className="h-10 w-10 text-gray-400 mb-2" />
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-4 text-center">
                   Drop your image here or click to upload
                 </p>
                 <Input
@@ -118,7 +118,7 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Car Name */}
           <FormField
             control={form.control}
@@ -158,7 +158,7 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Quantity */}
           <FormField
             control={form.control}
@@ -283,11 +283,11 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
           )}
         />
 
-        <div className="flex justify-end gap-2">
-          <Button type="button" variant="outline" onClick={onClose}>
+        <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-2 mt-6">
+          <Button type="button" variant="outline" onClick={onClose} className="order-2 sm:order-1">
             Cancel
           </Button>
-          <Button type="submit">
+          <Button type="submit" className="order-1 sm:order-2">
             <Check className="mr-2 h-4 w-4" /> Add Car
           </Button>
         </div>

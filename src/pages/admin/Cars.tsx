@@ -82,16 +82,16 @@ const Cars = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Cars</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Cars</h1>
         <Button onClick={() => setIsAddCarDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add New Car
         </Button>
       </div>
 
-      <div className="rounded-md border">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -123,8 +123,17 @@ const Cars = () => {
                       variant="outline" 
                       size="sm"
                       onClick={() => toggleStatus(car.id)}
+                      className="hidden sm:inline-flex"
                     >
                       {car.status === "Available" ? "Mark as Rented" : "Mark as Available"}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => toggleStatus(car.id)}
+                      className="sm:hidden"
+                    >
+                      {car.status === "Available" ? "Rent" : "Available"}
                     </Button>
                     <Button variant="ghost" size="icon">
                       <Pencil className="h-4 w-4" />
@@ -142,14 +151,16 @@ const Cars = () => {
 
       {/* Add Car Dialog */}
       <Dialog open={isAddCarDialogOpen} onOpenChange={setIsAddCarDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Add New Car</DialogTitle>
+        <DialogContent className="sm:max-w-[90%] md:max-w-[800px] p-0 sm:p-6">
+          <DialogHeader className="p-6 sm:p-0">
+            <DialogTitle className="text-xl">Add New Car</DialogTitle>
           </DialogHeader>
-          <AddCarForm 
-            onClose={() => setIsAddCarDialogOpen(false)} 
-            onSubmit={handleAddCar} 
-          />
+          <div className="overflow-y-auto max-h-[80vh] px-6 pb-6 sm:px-0 sm:pb-0">
+            <AddCarForm 
+              onClose={() => setIsAddCarDialogOpen(false)} 
+              onSubmit={handleAddCar} 
+            />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
