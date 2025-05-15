@@ -10,6 +10,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import AddCarForm from "@/components/admin/AddCarForm";
+import { toast } from "sonner";
 
 // Mock car data
 const initialCars = [
@@ -52,6 +55,7 @@ const initialCars = [
 
 const Cars = () => {
   const [cars, setCars] = useState(initialCars);
+  const [isAddCarDialogOpen, setIsAddCarDialogOpen] = useState(false);
 
   const toggleStatus = (id: number) => {
     setCars(cars.map(car => 
@@ -64,11 +68,24 @@ const Cars = () => {
     ));
   };
 
+  const handleAddCar = (data: any) => {
+    const newCar = {
+      id: cars.length + 1,
+      name: data.name,
+      type: data.transmission,
+      status: data.isAvailable ? "Available" : "Not Available",
+      mileage: "0 km"
+    };
+    setCars([...cars, newCar]);
+    setIsAddCarDialogOpen(false);
+    toast.success(`${data.name} added successfully!`);
+  };
+
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Cars</h1>
-        <Button>
+        <Button onClick={() => setIsAddCarDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add New Car
         </Button>
@@ -122,6 +139,19 @@ const Cars = () => {
           </TableBody>
         </Table>
       </div>
+
+      {/* Add Car Dialog */}
+      <Dialog open={isAddCarDialogOpen} onOpenChange={setIsAddCarDialogOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Add New Car</DialogTitle>
+          </DialogHeader>
+          <AddCarForm 
+            onClose={() => setIsAddCarDialogOpen(false)} 
+            onSubmit={handleAddCar} 
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
