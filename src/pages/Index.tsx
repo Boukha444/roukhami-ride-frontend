@@ -2,62 +2,53 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Car, Shield, Clock, CreditCard, Star, StarHalf } from "lucide-react";
 import { cars } from "@/lib/carsData";
 import CarCard from "@/components/CarCard";
-
 const Index = () => {
   // Get 3 featured cars for the homepage
   const featuredCars = cars.slice(0, 3);
 
   // Testimonial data with ratings
-  const testimonials = [
-    {
-      id: 1,
-      text: "Excellent service, voiture propre et en parfait état. La prise en charge à l'aéroport a été très rapide. Je recommande !",
-      name: "Mohammed A.",
-      location: "Casablanca",
-      rating: 5
-    },
-    {
-      id: 2,
-      text: "Très satisfaite de ma location. Le personnel est professionnel et à l'écoute. Voiture récente et prix raisonnable.",
-      name: "Samira L.",
-      location: "Marrakech",
-      rating: 4.5
-    },
-    {
-      id: 3,
-      text: "Deuxième fois que je loue chez ROUKHAMI CAR et toujours aussi satisfait. Service fiable et véhicules impeccables.",
-      name: "Karim B.",
-      location: "Tanger",
-      rating: 5
-    }
-  ];
+  const testimonials = [{
+    id: 1,
+    text: "Excellent service, voiture propre et en parfait état. La prise en charge à l'aéroport a été très rapide. Je recommande !",
+    name: "Mohammed A.",
+    location: "Casablanca",
+    rating: 5
+  }, {
+    id: 2,
+    text: "Très satisfaite de ma location. Le personnel est professionnel et à l'écoute. Voiture récente et prix raisonnable.",
+    name: "Samira L.",
+    location: "Marrakech",
+    rating: 4.5
+  }, {
+    id: 3,
+    text: "Deuxième fois que je loue chez ROUKHAMI CAR et toujours aussi satisfait. Service fiable et véhicules impeccables.",
+    name: "Karim B.",
+    location: "Tanger",
+    rating: 5
+  }];
 
   // Helper function to render stars based on rating
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 !== 0;
-    
+
     // Add full stars
     for (let i = 0; i < fullStars; i++) {
       stars.push(<Star key={`star-${i}`} className="h-5 w-5 fill-amber-400 text-amber-400" />);
     }
-    
+
     // Add half star if needed
     if (hasHalfStar) {
       stars.push(<StarHalf key="half-star" className="h-5 w-5 fill-amber-400 text-amber-400" />);
     }
-    
     return stars;
   };
-
-  return (
-    <>
+  return <>
       {/* Hero Section */}
-      <section 
-        className="relative bg-cover bg-center h-[90vh] flex items-center" 
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1592805144716-feeccccef5ac?q=80&w=1920')" }}
-      >
+      <section className="relative bg-cover bg-center h-[90vh] flex items-center" style={{
+      backgroundImage: "url('https://images.unsplash.com/photo-1592805144716-feeccccef5ac?q=80&w=1920')"
+    }}>
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
         <div className="container-custom relative z-10 text-white">
           <div className="max-w-2xl">
@@ -84,19 +75,14 @@ const Index = () => {
         <div className="container-custom">
           <div className="flex justify-between items-center mb-10">
             <h2 className="text-3xl font-bold">Nos véhicules populaires</h2>
-            <Link 
-              to="/cars" 
-              className="flex items-center text-roukhami-blue font-medium hover:underline"
-            >
+            <Link to="/cars" className="flex items-center text-roukhami-blue font-medium hover:underline">
               Voir tous
               <ChevronRight className="h-4 w-4 ml-1" />
             </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredCars.map((car) => (
-              <CarCard key={car.id} car={car} />
-            ))}
+            {featuredCars.map(car => <CarCard key={car.id} car={car} />)}
           </div>
         </div>
       </section>
@@ -151,10 +137,9 @@ const Index = () => {
       </section>
       
       {/* CTA Section - Redesigned with glassmorphism */}
-      <section 
-        className="py-20 relative bg-cover bg-center bg-no-repeat h-[50vh] flex items-center"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1920')" }}
-      >
+      <section className="py-20 relative bg-cover bg-center bg-no-repeat h-[50vh] flex items-center" style={{
+      backgroundImage: "url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1920')"
+    }}>
         <div className="absolute inset-0 bg-black bg-opacity-60"></div>
         
         <div className="container-custom relative z-10">
@@ -163,10 +148,7 @@ const Index = () => {
             <p className="text-lg max-w-xl mx-auto mb-8 text-gray-100">
               Réservez dès maintenant et bénéficiez de nos offres spéciales pour votre prochaine location.
             </p>
-            <Link 
-              to="/booking"
-              className="inline-block bg-gradient-to-r from-roukhami-blue to-blue-500 text-white font-semibold px-8 py-3 rounded-md hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105"
-            >
+            <Link to="/booking" className="inline-block bg-gradient-to-r from-roukhami-blue to-blue-500 text-white font-semibold px-8 py-3 rounded-md hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105">
               Réserver maintenant
             </Link>
           </div>
@@ -179,11 +161,7 @@ const Index = () => {
           <h2 className="text-3xl font-bold mb-12">Ce que nos clients disent</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial) => (
-              <div 
-                key={testimonial.id}
-                className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
-              >
+            {testimonials.map(testimonial => <div key={testimonial.id} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
                 <div className="flex justify-center mb-4">
                   {renderStars(testimonial.rating)}
                 </div>
@@ -197,13 +175,10 @@ const Index = () => {
                   <p className="font-semibold text-roukhami-blue">{testimonial.name}</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">{testimonial.location}</p>
                 </div>
-              </div>
-            ))}
+              </div>)}
           </div>
         </div>
       </section>
-    </>
-  );
+    </>;
 };
-
 export default Index;
