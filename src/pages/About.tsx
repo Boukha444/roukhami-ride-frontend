@@ -1,6 +1,5 @@
-
 import React from "react";
-import { Shield, Clock, Users, Award } from "lucide-react";
+import { Shield, Clock, Users, Award, CheckCircle } from "lucide-react";
 
 const About = () => {
   return (
