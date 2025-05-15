@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { ChevronRight, Car, Shield, Clock, CreditCard, Star, StarHalf } from "lucide-react";
 import { cars } from "@/lib/carsData";
@@ -151,19 +150,26 @@ const Index = () => {
         </div>
       </section>
       
-      {/* CTA Section */}
-      <section className="py-16 bg-roukhami-blue text-white">
-        <div className="container-custom text-center">
-          <h2 className="text-3xl font-bold mb-4">Prêt à prendre la route ?</h2>
-          <p className="text-lg max-w-2xl mx-auto mb-8">
-            Réservez dès maintenant et bénéficiez de nos offres spéciales pour votre prochaine location.
-          </p>
-          <Link 
-            to="/booking"
-            className="inline-block bg-white text-roukhami-blue font-semibold px-8 py-3 rounded-md hover:bg-gray-100 transition-colors"
-          >
-            Réserver maintenant
-          </Link>
+      {/* CTA Section - Redesigned with glassmorphism */}
+      <section 
+        className="py-20 relative bg-cover bg-center bg-no-repeat h-[50vh] flex items-center"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1920')" }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-60"></div>
+        
+        <div className="container-custom relative z-10">
+          <div className="max-w-2xl mx-auto backdrop-blur-xl bg-black/30 p-10 rounded-xl border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.2)]">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white text-gradient">Prêt à prendre la route ?</h2>
+            <p className="text-lg max-w-xl mx-auto mb-8 text-gray-100">
+              Réservez dès maintenant et bénéficiez de nos offres spéciales pour votre prochaine location.
+            </p>
+            <Link 
+              to="/booking"
+              className="inline-block bg-gradient-to-r from-roukhami-blue to-blue-500 text-white font-semibold px-8 py-3 rounded-md hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105"
+            >
+              Réserver maintenant
+            </Link>
+          </div>
         </div>
       </section>
       
