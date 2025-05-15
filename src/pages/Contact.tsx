@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, MessageSquare } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageSquare, CheckCircle } from "lucide-react";
 import { toast } from "sonner";
 
 const Contact = () => {
