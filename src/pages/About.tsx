@@ -210,25 +210,38 @@ const About = () => {
       </section>
       
       {/* CTA Section */}
-      <section className="py-16 bg-roukhami-blue text-white">
-        <div className="container-custom text-center">
-          <h2 className="text-3xl font-bold mb-4">Prêt à découvrir la différence ROUKHAMI CAR ?</h2>
-          <p className="text-lg max-w-2xl mx-auto mb-8">
-            Contactez-nous dès aujourd'hui pour en savoir plus sur nos services ou pour effectuer une réservation.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="/contact"
-              className="bg-white text-roukhami-blue font-semibold px-8 py-3 rounded-md hover:bg-gray-100 transition-colors"
-            >
-              Contactez-nous
-            </a>
-            <a 
-              href="/booking"
-              className="bg-transparent border border-white text-white font-semibold px-8 py-3 rounded-md hover:bg-white/10 transition-colors"
-            >
-              Réserver maintenant
-            </a>
+      <section className="py-24 relative overflow-hidden min-h-[500px] flex items-center">
+        {/* Background image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-fixed z-0"
+          style={{
+            backgroundImage: "url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?q=80&w=2070')"
+          }}
+        ></div>
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-roukhami-blue/90 via-roukhami-blue/85 to-roukhami-blue/90 z-10"></div>
+        
+        {/* Content */}
+        <div className="container-custom relative z-20">
+          <div className="glass max-w-4xl mx-auto text-center p-12 rounded-xl">
+            <h2 className="text-4xl font-bold mb-6 text-white">Prêt à découvrir la différence ROUKHAMI CAR ?</h2>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
+              Contactez-nous dès aujourd'hui pour en savoir plus sur nos services ou pour effectuer une réservation.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a 
+                href="/contact"
+                className="bg-white text-roukhami-blue font-semibold px-8 py-4 rounded-md hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Contactez-nous
+              </a>
+              <a 
+                href="/booking"
+                className="bg-transparent border-2 border-white text-white font-semibold px-8 py-4 rounded-md hover:bg-white/10 transition-all transform hover:scale-105 shadow-lg"
+              >
+                Réserver maintenant
+              </a>
+            </div>
           </div>
         </div>
       </section>
