@@ -5,6 +5,7 @@ import BookingForm from "@/components/BookingForm";
 import CarDetails from "@/components/CarDetails";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cars, Car } from "@/lib/carsData";
+import { motion } from "framer-motion";
 
 const Booking = () => {
   const { t } = useLanguage();
@@ -19,6 +20,9 @@ const Booking = () => {
     if (carId) {
       const car = cars.find((c) => c.id === parseInt(carId));
       if (car) setSelectedCar(car);
+    } else {
+      // Reset selected car if no carId in URL
+      setSelectedCar(null);
     }
   }, [location]);
   
@@ -37,7 +41,15 @@ const Booking = () => {
       {/* Car Details (if a car is selected) */}
       <section className="py-8 bg-gray-50 dark:bg-gray-900">
         <div className="container-custom max-w-3xl">
-          {selectedCar && <CarDetails car={selectedCar} />}
+          {selectedCar && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
+              <CarDetails car={selectedCar} />
+            </motion.div>
+          )}
         </div>
       </section>
       
@@ -45,7 +57,7 @@ const Booking = () => {
       <section className={`${selectedCar ? 'pt-0' : 'pt-16'} pb-16 bg-gray-50 dark:bg-gray-900`}>
         <div className="container-custom max-w-3xl">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 md:p-8">
-            <BookingForm />
+            <BookingForm selectedCarProp={selectedCar} />
           </div>
           
           <div className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg">

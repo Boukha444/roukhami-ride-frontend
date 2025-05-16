@@ -1,13 +1,16 @@
-
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Calendar, MapPin, Upload, MessageSquare } from "lucide-react";
-import { cars } from "@/lib/carsData";
+import { cars, Car } from "@/lib/carsData";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-export default function BookingForm() {
+interface BookingFormProps {
+  selectedCarProp?: Car | null;
+}
+
+export default function BookingForm({ selectedCarProp }: BookingFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -20,14 +23,24 @@ export default function BookingForm() {
   const { t, language } = useLanguage();
 
   useEffect(() => {
-    // Check if there's a car parameter in the URL
-    const params = new URLSearchParams(location.search);
-    const carId = params.get("car");
-    if (carId) {
-      const car = cars.find((c) => c.id === parseInt(carId));
-      if (car) setSelectedCar(car.name);
+    // Update selected car when prop changes
+    if (selectedCarProp) {
+      setSelectedCar(selectedCarProp.name);
     }
-  }, [location]);
+  }, [selectedCarProp]);
+
+  useEffect(() => {
+    // Only use this fallback if selectedCarProp is not provided
+    if (!selectedCarProp) {
+      // Check if there's a car parameter in the URL
+      const params = new URLSearchParams(location.search);
+      const carId = params.get("car");
+      if (carId) {
+        const car = cars.find((c) => c.id === parseInt(carId));
+        if (car) setSelectedCar(car.name);
+      }
+    }
+  }, [location, selectedCarProp]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
