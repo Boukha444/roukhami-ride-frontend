@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Car } from "@/lib/carsData";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -13,91 +12,97 @@ const CarDetails = ({ car }: CarDetailsProps) => {
   
   if (!car) return null;
   
+  const carDetails = [
+    {
+      icon: <CircleDashed className="h-5 w-5 text-roukhami-blue" />,
+      label: t('transmission'),
+      value: car.transmission
+    },
+    {
+      icon: <Fuel className="h-5 w-5 text-roukhami-blue" />,
+      label: t('fuelType'),
+      value: car.fuelType
+    },
+    {
+      icon: <Tag className="h-5 w-5 text-roukhami-blue" />,
+      label: t('category'),
+      value: car.category
+    },
+    {
+      icon: <ScrollText className="h-5 w-5 text-roukhami-blue" />,
+      label: t('quantity'),
+      value: `${car.quantity} ${car.quantity > 1 ? t('available.plural') : t('available.singular')}`
+    }
+  ];
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden mb-8">
       <div className="relative">
-        {/* Car Image */}
         <div className="h-48 sm:h-64 md:h-80 overflow-hidden">
           <img 
             src={car.image} 
             alt={car.name} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
         </div>
         
-        {/* Availability Badge */}
         <div className="absolute top-4 right-4">
-          <Badge className={`${car.isAvailable ? 'bg-green-500' : 'bg-red-500'} text-white`}>
-            {car.isAvailable ? t('booking.available') : t('booking.unavailable')}
+          <Badge 
+            className={`px-3 py-1 text-sm font-medium ${
+              car.isAvailable 
+                ? 'bg-green-500 hover:bg-green-600' 
+                : 'bg-red-500 hover:bg-red-600'
+            } text-white transition-colors`}
+          >
+            {car.isAvailable ? t('available') : t('unavailable')}
           </Badge>
         </div>
       </div>
       
       <div className="p-6">
-        {/* Car Name and Price */}
-        <div className="flex flex-wrap justify-between items-start gap-2 mb-4">
+        <div className="flex flex-wrap justify-between items-start gap-4 mb-6">
           <div>
-            <h2 className="text-2xl font-bold">{car.name}</h2>
-            <div className="text-sm text-gray-500 dark:text-gray-400">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{car.name}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               {car.category}
-            </div>
+            </p>
           </div>
           <div className="text-right">
             <div className="text-2xl font-bold text-roukhami-blue">
               {car.dailyRate}€
             </div>
             <div className="text-sm text-gray-500 dark:text-gray-400">
-              {t('featuredCars.perDay')}
+              {t('perDay')}
             </div>
           </div>
         </div>
         
-        {/* Car Details */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          {/* Transmission */}
-          <div className="flex items-center gap-2">
-            <CircleDashed className="h-5 w-5 text-gray-400" />
-            <div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">{t('booking.carDetails.transmission')}</div>
-              <div className="font-medium">{car.transmission}</div>
-            </div>
-          </div>
-          
-          {/* Fuel Type */}
-          <div className="flex items-center gap-2">
-            <Fuel className="h-5 w-5 text-gray-400" />
-            <div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">{t('booking.carDetails.fuelType')}</div>
-              <div className="font-medium">{car.fuelType}</div>
-            </div>
-          </div>
-          
-          {/* Category */}
-          <div className="flex items-center gap-2">
-            <Tag className="h-5 w-5 text-gray-400" />
-            <div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">{t('booking.carDetails.category')}</div>
-              <div className="font-medium">{car.category}</div>
-            </div>
-          </div>
-          
-          {/* Quantity */}
-          <div className="flex items-center gap-2">
-            <ScrollText className="h-5 w-5 text-gray-400" />
-            <div>
-              <div className="text-xs text-gray-500 dark:text-gray-400">{t('booking.carDetails.quantity')}</div>
-              <div className="font-medium">
-                {car.quantity} {car.quantity > 1 ? t('featuredCars.availables') : t('featuredCars.available')}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {carDetails.map((detail, index) => (
+            <div key={index} className="flex items-center gap-3 group">
+              <div className="transition-transform duration-200 group-hover:scale-110">
+                {detail.icon}
+              </div>
+              <div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  {detail.label}
+                </div>
+                <div className="font-medium text-gray-900 dark:text-white">
+                  {detail.value}
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
         
-        {/* Description */}
         {car.description && (
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-            <h3 className="font-medium mb-2">{t('booking.carDetails.description')}</h3>
-            <p className="text-gray-600 dark:text-gray-300">{car.description}</p>
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <h3 className="font-medium text-gray-900 dark:text-white mb-2">
+              {t('description')}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+              {car.description}
+            </p>
           </div>
         )}
       </div>
