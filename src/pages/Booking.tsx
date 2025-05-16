@@ -37,24 +37,8 @@ const Booking = () => {
           </p>
         </div>
       </section>
-      
-      {/* Car Details (if a car is selected) */}
-      <section className="py-8 bg-gray-50 dark:bg-gray-900">
-        <div className="container-custom max-w-3xl">
-          {selectedCar && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-            >
-              <CarDetails car={selectedCar} />
-            </motion.div>
-          )}
-        </div>
-      </section>
-      
-      {/* Booking Form */}
-      <section className={`${selectedCar ? 'pt-0' : 'pt-16'} pb-16 bg-gray-50 dark:bg-gray-900`}>
+        {/* Booking Form */}
+      <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="container-custom max-w-3xl">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 md:p-8">
             <BookingForm selectedCarProp={selectedCar} />
