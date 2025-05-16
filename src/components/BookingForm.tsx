@@ -5,6 +5,7 @@ import { cars, Car } from "@/lib/carsData";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useLanguage } from "@/contexts/LanguageContext";
+import CarDetails from "@/components/CarDetails";
 
 interface BookingFormProps {
   selectedCarProp?: Car | null;
@@ -17,15 +18,16 @@ export default function BookingForm({ selectedCarProp }: BookingFormProps) {
   const [endDate, setEndDate] = useState("");
   const [pickupLocation, setPickupLocation] = useState("");
   const [selectedCar, setSelectedCar] = useState("");
+  const [selectedCarObject, setSelectedCarObject] = useState<Car | null>(null);
   const [license, setLicense] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const location = useLocation();
   const { t, language } = useLanguage();
-
   useEffect(() => {
     // Update selected car when prop changes
     if (selectedCarProp) {
       setSelectedCar(selectedCarProp.name);
+      setSelectedCarObject(selectedCarProp);
     }
   }, [selectedCarProp]);
 
@@ -37,7 +39,10 @@ export default function BookingForm({ selectedCarProp }: BookingFormProps) {
       const carId = params.get("car");
       if (carId) {
         const car = cars.find((c) => c.id === parseInt(carId));
-        if (car) setSelectedCar(car.name);
+        if (car) {
+          setSelectedCar(car.name);
+          setSelectedCarObject(car);
+        }
       }
     }
   }, [location, selectedCarProp]);
@@ -145,8 +150,10 @@ ${language === 'fr' ? 'Merci!' : language === 'de' ? 'Danke!' : language === 'es
           </label>
           <select
             id="car"
-            value={selectedCar}
-            onChange={(e) => setSelectedCar(e.target.value)}
+            value={selectedCar}            onChange={(e) => {
+              setSelectedCar(e.target.value);
+              setSelectedCarObject(cars.find(car => car.name === e.target.value) || null);
+            }}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-roukhami-blue"
             required
           >
@@ -157,6 +164,13 @@ ${language === 'fr' ? 'Merci!' : language === 'de' ? 'Danke!' : language === 'es
               </option>
             ))}
           </select>
+        </div>
+        
+        {/* Car Details Section */}
+        <div className="col-span-full">
+          <div className={`transition-all duration-300 ease-in-out ${selectedCarObject ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0 overflow-hidden'}`}>
+            <CarDetails car={selectedCarObject} />
+          </div>
         </div>
         
         {/* Name */}
