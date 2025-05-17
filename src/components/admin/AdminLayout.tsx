@@ -12,6 +12,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
   SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,7 +47,6 @@ import { cn } from "@/lib/utils";
 
 const AdminLayout = () => {
   const location = useLocation();
-  const [collapsed, setCollapsed] = useState(false);
   const [notifications] = useState([
     { id: 1, text: "New booking request from Sophie Martin", time: "5 minutes ago" },
     { id: 2, text: "Driver's license uploaded by Martin Dupont", time: "1 hour ago" },
@@ -86,15 +86,11 @@ const AdminLayout = () => {
     },
   ];
 
-  const toggleSidebar = () => {
-    setCollapsed(!collapsed);
-  };
-
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-screen w-full bg-background">
         <Sidebar
-          collapsible={collapsed ? "icon" : "none"}
+          collapsible="icon"
           className="border-r border-border bg-background shadow-sm"
         >
           <SidebarHeader className="flex items-center justify-between px-4 py-3">
@@ -102,14 +98,7 @@ const AdminLayout = () => {
               <Car className="h-6 w-6 text-roukhami-blue" />
               <span className="font-bold text-lg">ROUKHAMI CAR</span>
             </div>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              onClick={toggleSidebar} 
-              className="hidden md:flex"
-            >
-              {collapsed ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-            </Button>
+            <SidebarToggleButton />
           </SidebarHeader>
           <SidebarContent className="px-2 py-2">
             <SidebarMenu>
@@ -215,6 +204,28 @@ const AdminLayout = () => {
         </div>
       </div>
     </SidebarProvider>
+  );
+};
+
+// New SidebarToggleButton component to handle the toggle functionality
+const SidebarToggleButton = () => {
+  const { toggleSidebar, state } = useSidebar();
+  const isExpanded = state === "expanded";
+  
+  return (
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      onClick={toggleSidebar}
+      className="transition-all duration-300 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-muted"
+      aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
+    >
+      {isExpanded ? (
+        <ChevronLeft className="h-5 w-5 transition-transform duration-300" />
+      ) : (
+        <ChevronRight className="h-5 w-5 transition-transform duration-300" />
+      )}
+    </Button>
   );
 };
 
