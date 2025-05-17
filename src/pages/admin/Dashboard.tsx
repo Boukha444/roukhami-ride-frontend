@@ -1,8 +1,25 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bar, BarChart, ResponsiveContainer } from "recharts";
 import { Car, Calendar, Users, FileText } from "lucide-react";
 import { ChartContainer } from "@/components/ui/chart";
+import { cn } from "@/lib/utils";
+
+// Helper function to format number changes with appropriate color
+const formatNumberChange = (value: string | number) => {
+  const valueStr = value.toString();
+  const isPositive = valueStr.startsWith("+");
+  const isNegative = valueStr.startsWith("-");
+  
+  if (isPositive) {
+    return <span className="text-green-600">{valueStr}</span>;
+  } else if (isNegative) {
+    return <span className="text-red-600">{valueStr}</span>;
+  }
+  
+  return valueStr;
+};
 
 const Dashboard = () => {
   // Mock data for the chart
@@ -30,7 +47,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="text-2xl font-bold">24</div>
             <p className="text-xs text-muted-foreground">
-              +2 added this month
+              {formatNumberChange("+2")} added this month
             </p>
           </CardContent>
         </Card>
@@ -56,7 +73,7 @@ const Dashboard = () => {
           <CardContent>
             <div className="text-2xl font-bold">5</div>
             <p className="text-xs text-muted-foreground">
-              +2 from yesterday
+              {formatNumberChange("+2")} from yesterday
             </p>
           </CardContent>
         </Card>

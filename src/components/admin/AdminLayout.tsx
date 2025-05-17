@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, Outlet, useLocation, Link } from "react-router-dom";
 import {
   Sidebar,
@@ -11,6 +11,8 @@ import {
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
+  SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,8 +29,21 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Car, Bell, Search, User, Settings, LayoutDashboard, Calendar, Users, FileText } from "lucide-react";
+import { 
+  Car, 
+  Bell, 
+  Search, 
+  User, 
+  Settings, 
+  LayoutDashboard, 
+  Calendar, 
+  Users, 
+  FileText,
+  ChevronRight,
+  ChevronLeft
+} from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -74,14 +89,18 @@ const AdminLayout = () => {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-screen w-full bg-background">
-        <Sidebar>
-          <SidebarHeader className="flex items-center gap-2 px-4">
-            <div className="flex items-center space-x-2">
-              <Car className="h-6 w-6" />
-              <span className="font-bold text-lg">ROUKHAMI CAR</span>
+        <Sidebar
+          collapsible="icon"
+          className="border-r border-border bg-background shadow-sm z-50"
+        >
+          <SidebarHeader className="flex items-center justify-between px-4 py-3 bg-background">
+            <div className="flex items-center">
+              <Car className="h-6 w-6 text-roukhami-blue" />
+              <span className="font-bold text-lg md:hidden ml-2">ROUKHAMI CAR</span>
             </div>
+            <SidebarToggleButton />
           </SidebarHeader>
-          <SidebarContent>
+          <SidebarContent className="px-2 py-2 bg-background">
             <SidebarMenu>
               {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.path}>
@@ -89,9 +108,16 @@ const AdminLayout = () => {
                     asChild
                     isActive={location.pathname === item.path}
                     tooltip={item.title}
+                    className={cn(
+                      "transition-all duration-200 hover:bg-muted",
+                      location.pathname === item.path && "bg-muted font-medium"
+                    )}
                   >
-                    <Link to={item.path}>
-                      <item.icon />
+                    <Link to={item.path} className="flex items-center gap-3 px-3 py-2">
+                      <item.icon className={cn(
+                        "h-5 w-5",
+                        location.pathname === item.path ? "text-roukhami-blue" : "text-muted-foreground"
+                      )} />
                       <span>{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
@@ -99,17 +125,18 @@ const AdminLayout = () => {
               ))}
             </SidebarMenu>
           </SidebarContent>
-          <SidebarFooter className="p-4">
+          <SidebarFooter className="mt-auto p-4 border-t border-border bg-background">
             <p className="text-xs text-center text-muted-foreground">
               © 2023 ROUKHAMI CAR Admin
             </p>
           </SidebarFooter>
+          <SidebarRail />
         </Sidebar>
 
         <div className="flex flex-col flex-1 overflow-hidden">
           {/* Top Navbar */}
-          <header className="flex h-14 items-center gap-4 border-b bg-background px-4 lg:px-6">
-            <SidebarTrigger />
+          <header className="flex h-16 items-center gap-4 border-b bg-background px-4 lg:px-6">
+            <SidebarTrigger className="md:hidden" />
             
             <div className="flex-1 flex items-center gap-2 md:gap-4">
               <form className="flex-1 hidden md:flex max-w-sm">
@@ -118,7 +145,7 @@ const AdminLayout = () => {
                   <Input
                     type="search"
                     placeholder="Search..."
-                    className="w-full pl-8"
+                    className="w-full pl-8 bg-background"
                   />
                 </div>
               </form>
@@ -129,7 +156,7 @@ const AdminLayout = () => {
                 <PopoverTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
                     <Bell className="h-5 w-5" />
-                    <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-600"></span>
+                    <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-red-600"></span>
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="end" className="w-80 p-0">
@@ -138,7 +165,7 @@ const AdminLayout = () => {
                   </div>
                   <div className="max-h-80 overflow-auto">
                     {notifications.map((notification) => (
-                      <div key={notification.id} className="p-4 border-b last:border-0">
+                      <div key={notification.id} className="p-4 border-b last:border-0 hover:bg-muted/50 transition-colors">
                         <p className="text-sm">{notification.text}</p>
                         <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
                       </div>
@@ -151,7 +178,7 @@ const AdminLayout = () => {
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
+                  <Button variant="ghost" size="icon" className="rounded-full">
                     <User className="h-5 w-5" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -171,12 +198,34 @@ const AdminLayout = () => {
           </header>
 
           {/* Main Content */}
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 overflow-auto p-4 lg:p-6">
             <Outlet />
           </div>
         </div>
       </div>
     </SidebarProvider>
+  );
+};
+
+// New SidebarToggleButton component to handle the toggle functionality
+const SidebarToggleButton = () => {
+  const { toggleSidebar, state } = useSidebar();
+  const isExpanded = state === "expanded";
+  
+  return (
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      onClick={toggleSidebar}
+      className="transition-all duration-300 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-muted"
+      aria-label={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
+    >
+      {isExpanded ? (
+        <ChevronLeft className="h-5 w-5 transition-transform duration-300" />
+      ) : (
+        <ChevronRight className="h-5 w-5 transition-transform duration-300" />
+      )}
+    </Button>
   );
 };
 
