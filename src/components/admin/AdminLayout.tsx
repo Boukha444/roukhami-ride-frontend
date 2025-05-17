@@ -94,9 +94,9 @@ const AdminLayout = () => {
           className="border-r border-border bg-background shadow-sm z-50"
         >
           <SidebarHeader className="flex items-center justify-between px-4 py-3 bg-background">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center">
               <Car className="h-6 w-6 text-roukhami-blue" />
-              <span className="font-bold text-lg">ROUKHAMI CAR</span>
+              <span className="font-bold text-lg md:hidden ml-2">ROUKHAMI CAR</span>
             </div>
             <SidebarToggleButton />
           </SidebarHeader>
