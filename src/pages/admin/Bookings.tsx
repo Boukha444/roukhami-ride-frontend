@@ -191,6 +191,12 @@ const mockBookings = [
   },
 ];
 
+// Define the DateRange type to match what the Calendar component expects
+interface DateRange {
+  from: Date | undefined;
+  to: Date | undefined;
+}
+
 const Bookings = () => {
   const { toast } = useToast();
   const [bookings, setBookings] = useState(mockBookings);
@@ -198,7 +204,7 @@ const Bookings = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
-  const [dateRangeFilter, setDateRangeFilter] = useState<{ from: Date | undefined; to: Date | undefined }>({ from: undefined, to: undefined });
+  const [dateRangeFilter, setDateRangeFilter] = useState<DateRange>({ from: undefined, to: undefined });
   const [datePresetFilter, setDatePresetFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [bookingsPerPage] = useState(5);
@@ -464,10 +470,7 @@ const Bookings = () => {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="range"
-                    selected={{
-                      from: dateRangeFilter.from,
-                      to: dateRangeFilter.to,
-                    }}
+                    selected={dateRangeFilter}
                     onSelect={(range) => setDateRangeFilter(range || { from: undefined, to: undefined })}
                     initialFocus
                     className="p-3 pointer-events-auto"
