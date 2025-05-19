@@ -11,27 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { 
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle
-} from "@/components/ui/alert-dialog";
 import AddCarForm from "@/components/admin/AddCarForm";
 import { toast } from "sonner";
-
-// Car type definition
-interface Car {
-  id: number;
-  name: string;
-  type: string;
-  status: string;
-  mileage: string;
-}
 
 // Mock car data
 const initialCars = [
@@ -73,11 +54,8 @@ const initialCars = [
 ];
 
 const Cars = () => {
-  const [cars, setCars] = useState<Car[]>(initialCars);
+  const [cars, setCars] = useState(initialCars);
   const [isAddCarDialogOpen, setIsAddCarDialogOpen] = useState(false);
-  const [isEditCarDialogOpen, setIsEditCarDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [selectedCar, setSelectedCar] = useState<Car | null>(null);
 
   const toggleStatus = (id: number) => {
     setCars(cars.map(car => 
@@ -101,42 +79,6 @@ const Cars = () => {
     setCars([...cars, newCar]);
     setIsAddCarDialogOpen(false);
     toast.success(`${data.name} added successfully!`);
-  };
-
-  const handleEditCar = (data: any) => {
-    if (!selectedCar) return;
-    
-    setCars(cars.map(car => 
-      car.id === selectedCar.id 
-        ? { 
-            ...car, 
-            name: data.name,
-            type: data.transmission,
-            status: data.isAvailable ? "Available" : "Rented"
-          } 
-        : car
-    ));
-    
-    setIsEditCarDialogOpen(false);
-    toast.success(`${data.name} updated successfully!`);
-  };
-
-  const handleDeleteCar = () => {
-    if (!selectedCar) return;
-    
-    setCars(cars.filter(car => car.id !== selectedCar.id));
-    setIsDeleteDialogOpen(false);
-    toast.success(`${selectedCar.name} deleted successfully!`);
-  };
-
-  const openEditDialog = (car: Car) => {
-    setSelectedCar(car);
-    setIsEditCarDialogOpen(true);
-  };
-
-  const openDeleteDialog = (car: Car) => {
-    setSelectedCar(car);
-    setIsDeleteDialogOpen(true);
   };
 
   return (
@@ -193,18 +135,10 @@ const Cars = () => {
                     >
                       {car.status === "Available" ? "Rent" : "Available"}
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => openEditDialog(car)}
-                    >
+                    <Button variant="ghost" size="icon">
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon"
-                      onClick={() => openDeleteDialog(car)}
-                    >
+                    <Button variant="ghost" size="icon">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -229,51 +163,6 @@ const Cars = () => {
           </div>
         </DialogContent>
       </Dialog>
-
-      {/* Edit Car Dialog */}
-      <Dialog open={isEditCarDialogOpen} onOpenChange={setIsEditCarDialogOpen}>
-        <DialogContent className="sm:max-w-[90%] md:max-w-[800px] p-0 sm:p-6">
-          <DialogHeader className="p-6 sm:p-0">
-            <DialogTitle className="text-xl">Edit Car</DialogTitle>
-          </DialogHeader>
-          <div className="overflow-y-auto max-h-[80vh] px-6 pb-6 sm:px-0 sm:pb-0">
-            {selectedCar && (
-              <AddCarForm 
-                onClose={() => setIsEditCarDialogOpen(false)} 
-                onSubmit={handleEditCar}
-                initialData={{
-                  name: selectedCar.name,
-                  transmission: selectedCar.type,
-                  isAvailable: selectedCar.status === "Available"
-                }}
-              />
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Delete Confirmation Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This will permanently delete {selectedCar?.name} from your fleet. This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsDeleteDialogOpen(false)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={handleDeleteCar} 
-              className="bg-red-600 hover:bg-red-700"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 };
