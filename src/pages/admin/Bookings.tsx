@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { 
   Table, 
@@ -191,12 +190,10 @@ const mockBookings = [
   },
 ];
 
-// Define the DateRange type to match what the Calendar component expects
-interface DateRange {
-  from: Date | undefined;
-  to: Date | undefined;
-}
+// Modify the DateRange interface to match what react-day-picker expects
+import type { DateRange as DayPickerDateRange } from "react-day-picker";
 
+// Use the imported type instead of our custom interface
 const Bookings = () => {
   const { toast } = useToast();
   const [bookings, setBookings] = useState(mockBookings);
@@ -204,7 +201,7 @@ const Bookings = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
-  const [dateRangeFilter, setDateRangeFilter] = useState<DateRange>({ from: undefined, to: undefined });
+  const [dateRangeFilter, setDateRangeFilter] = useState<DayPickerDateRange | undefined>(undefined);
   const [datePresetFilter, setDatePresetFilter] = useState("all");
   const [page, setPage] = useState(1);
   const [bookingsPerPage] = useState(5);
@@ -237,7 +234,7 @@ const Bookings = () => {
     }
     
     // Apply date range filter
-    if (dateRangeFilter.from && dateRangeFilter.to) {
+    if (dateRangeFilter?.from && dateRangeFilter?.to) {
       result = result.filter(booking => {
         const startDate = parseISO(booking.startDate);
         const endDate = parseISO(booking.endDate);
@@ -251,7 +248,7 @@ const Bookings = () => {
     }
     
     // Apply date preset filter
-    if (datePresetFilter !== "all" && !dateRangeFilter.from && !dateRangeFilter.to) {
+    if (datePresetFilter !== "all" && !dateRangeFilter?.from) {
       const today = startOfToday();
       let start: Date, end: Date;
       
@@ -303,7 +300,7 @@ const Bookings = () => {
     setSearchQuery("");
     setStatusFilter("all");
     setTypeFilter("all");
-    setDateRangeFilter({ from: undefined, to: undefined });
+    setDateRangeFilter(undefined);
     setDatePresetFilter("all");
   };
 
@@ -427,7 +424,7 @@ const Bookings = () => {
                 setDatePresetFilter(value);
                 // Clear custom date range when using presets
                 if (value !== "all") {
-                  setDateRangeFilter({ from: undefined, to: undefined });
+                  setDateRangeFilter(undefined);
                 }
               }}
             >
@@ -453,7 +450,7 @@ const Bookings = () => {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-full md:w-[240px] justify-start text-left">
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dateRangeFilter.from ? (
+                    {dateRangeFilter?.from ? (
                       dateRangeFilter.to ? (
                         <>
                           {format(dateRangeFilter.from, "LLL dd, y")} -{" "}
@@ -471,7 +468,7 @@ const Bookings = () => {
                   <Calendar
                     mode="range"
                     selected={dateRangeFilter}
-                    onSelect={(range) => setDateRangeFilter(range || { from: undefined, to: undefined })}
+                    onSelect={setDateRangeFilter}
                     initialFocus
                     className="p-3 pointer-events-auto"
                   />
