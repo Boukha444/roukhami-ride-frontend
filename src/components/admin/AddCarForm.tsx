@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +22,7 @@ const formSchema = z.object({
   category: z.enum(["Compact", "SUV", "Sedan", "Luxury", "Economy"]),
   description: z.string().optional(),
   isAvailable: z.boolean().default(true),
-  image: z.instanceof(File).optional(),
+  image: z.instanceof(File).optional().nullable(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -31,25 +30,34 @@ type FormValues = z.infer<typeof formSchema>;
 interface AddCarFormProps {
   onClose: () => void;
   onSubmit: (data: FormValues) => void;
+  isEditMode?: boolean;
+  carData?: any;
 }
 
-const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
+const AddCarForm = ({ onClose, onSubmit, isEditMode = false, carData = null }: AddCarFormProps) => {
   const [imagePreview, setImagePreview] = React.useState<string | null>(null);
   
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      transmission: "Manual",
-      quantity: 1,
-      fuelType: "Essence",
-      dailyRate: 30,
-      category: "Compact",
-      description: "",
-      isAvailable: true,
-      image: undefined,
+      name: isEditMode && carData ? carData.name : "",
+      transmission: isEditMode && carData ? carData.transmission : "Manual",
+      quantity: isEditMode && carData ? carData.quantity : 1,
+      fuelType: isEditMode && carData ? carData.fuelType : "Essence",
+      dailyRate: isEditMode && carData ? carData.dailyRate : 30,
+      category: isEditMode && carData ? carData.category : "Compact",
+      description: isEditMode && carData ? carData.description : "",
+      isAvailable: isEditMode && carData ? carData.isAvailable : true,
+      image: null,
     },
   });
+
+  React.useEffect(() => {
+    // Set image preview if editing a car with an existing image
+    if (isEditMode && carData && carData.image) {
+      setImagePreview(typeof carData.image === 'string' ? carData.image : URL.createObjectURL(carData.image));
+    }
+  }, [isEditMode, carData]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -64,8 +72,12 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
   };
 
   const handleSubmitForm = (data: FormValues) => {
+    // If editing and not changing the image, keep the existing image
+    if (isEditMode && !data.image && carData.image) {
+      data.image = carData.image;
+    }
+    
     onSubmit(data);
-    toast.success("Car added successfully!");
   };
 
   return (
@@ -80,18 +92,27 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
                 <AspectRatio ratio={16 / 9} className="bg-muted rounded-md overflow-hidden">
                   <img src={imagePreview} alt="Car preview" className="object-cover w-full h-full" />
                 </AspectRatio>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="mt-4"
-                  onClick={() => {
-                    setImagePreview(null);
-                    form.setValue("image", undefined);
-                  }}
-                >
-                  <X className="h-4 w-4 mr-2" /> Remove Image
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setImagePreview(null);
+                      form.setValue("image", null);
+                    }}
+                  >
+                    <X className="h-4 w-4 mr-2" /> Remove Image
+                  </Button>
+                  <Button 
+                    type="button" 
+                    variant="outline"
+                    size="sm"
+                    onClick={() => document.getElementById("image-upload")?.click()}
+                  >
+                    <Upload className="h-4 w-4 mr-2" /> Upload New Image
+                  </Button>
+                </div>
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center py-6 sm:py-8">
@@ -288,7 +309,7 @@ const AddCarForm = ({ onClose, onSubmit }: AddCarFormProps) => {
             Cancel
           </Button>
           <Button type="submit" className="order-1 sm:order-2">
-            <Check className="mr-2 h-4 w-4" /> Add Car
+            <Check className="mr-2 h-4 w-4" /> {isEditMode ? "Update Car" : "Add Car"}
           </Button>
         </div>
       </form>

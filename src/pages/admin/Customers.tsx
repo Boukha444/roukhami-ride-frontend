@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { 
   Table, 
   TableBody, 
@@ -9,7 +9,27 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { User, Check, X } from "lucide-react";
+import { User, Check, X, Download, FileText } from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { Card, CardContent } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+
+// Customer type definition
+interface Customer {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+  bookings: number;
+  licenseUploaded: boolean;
+}
 
 // Mock customers data
 const customers = [
@@ -55,6 +75,92 @@ const customers = [
   },
 ];
 
+const CustomerProfile = ({ customer }: { customer: Customer }) => {
+  const { toast } = useToast();
+  
+  const handleDownload = () => {
+    toast({
+      title: "License downloaded",
+      description: "The license file has been downloaded successfully.",
+    });
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="space-y-2">
+        <div className="flex items-center gap-4">
+          <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center">
+            <User className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">{customer.name}</h2>
+            <p className="text-muted-foreground">Customer ID: #{customer.id}</p>
+          </div>
+        </div>
+      </div>
+      
+      <Card>
+        <CardContent className="pt-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground mb-1">Phone</p>
+              <p>{customer.phone}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground mb-1">Email</p>
+              <p>{customer.email}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground mb-1">Bookings</p>
+              <p>{customer.bookings}</p>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-muted-foreground mb-1">License Status</p>
+              {customer.licenseUploaded ? (
+                <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-green-100 text-green-800">
+                  <Check className="mr-1 h-3 w-3" /> Uploaded
+                </div>
+              ) : (
+                <div className="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold bg-red-100 text-red-800">
+                  <X className="mr-1 h-3 w-3" /> Missing
+                </div>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {customer.licenseUploaded && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold">License Document</h3>
+          <div className="border rounded-md overflow-hidden">
+            <img 
+              src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=800&h=500&fit=crop" 
+              alt="License Document Preview" 
+              className="w-full h-64 object-cover"
+            />
+            <div className="p-4 bg-muted/20 flex items-center justify-between">
+              <div className="flex items-center">
+                <FileText className="h-4 w-4 mr-2" />
+                <span className="text-sm">license-document.pdf</span>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="ml-auto"
+                onClick={handleDownload}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Download License
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const Customers = () => {
   return (
     <div className="p-6">
@@ -91,10 +197,23 @@ const Customers = () => {
                   )}
                 </TableCell>
                 <TableCell className="text-right">
-                  <Button size="sm" variant="outline">
-                    <User className="mr-2 h-4 w-4" />
-                    View Profile
-                  </Button>
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button size="sm" variant="outline">
+                        <User className="mr-2 h-4 w-4" />
+                        View Profile
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
+                      <SheetHeader className="mb-6">
+                        <SheetTitle>Customer Profile</SheetTitle>
+                        <SheetDescription>
+                          View detailed information about this customer.
+                        </SheetDescription>
+                      </SheetHeader>
+                      <CustomerProfile customer={customer} />
+                    </SheetContent>
+                  </Sheet>
                 </TableCell>
               </TableRow>
             ))}

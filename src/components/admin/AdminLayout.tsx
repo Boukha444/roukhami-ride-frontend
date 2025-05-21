@@ -1,6 +1,6 @@
 
-import React, { useState, useEffect } from "react";
-import { Navigate, Outlet, useLocation, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import {
   Sidebar,
   SidebarContent,
@@ -10,30 +10,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
-  SidebarTrigger,
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import { 
   Car, 
-  Bell, 
-  Search, 
-  User, 
   Settings, 
   LayoutDashboard, 
   Calendar, 
@@ -42,8 +24,8 @@ import {
   ChevronRight,
   ChevronLeft
 } from "lucide-react";
-import ThemeToggle from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
+import AdminHeader from "./AdminHeader";
 
 const AdminLayout = () => {
   const location = useLocation();
@@ -135,67 +117,7 @@ const AdminLayout = () => {
 
         <div className="flex flex-col flex-1 overflow-hidden">
           {/* Top Navbar */}
-          <header className="flex h-16 items-center gap-4 border-b bg-background px-4 lg:px-6">
-            <SidebarTrigger className="md:hidden" />
-            
-            <div className="flex-1 flex items-center gap-2 md:gap-4">
-              <form className="flex-1 hidden md:flex max-w-sm">
-                <div className="relative w-full">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type="search"
-                    placeholder="Search..."
-                    className="w-full pl-8 bg-background"
-                  />
-                </div>
-              </form>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button variant="ghost" size="icon" className="relative">
-                    <Bell className="h-5 w-5" />
-                    <span className="absolute top-0.5 right-0.5 h-2 w-2 rounded-full bg-red-600"></span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-80 p-0">
-                  <div className="p-4 border-b">
-                    <p className="font-medium">Notifications</p>
-                  </div>
-                  <div className="max-h-80 overflow-auto">
-                    {notifications.map((notification) => (
-                      <div key={notification.id} className="p-4 border-b last:border-0 hover:bg-muted/50 transition-colors">
-                        <p className="text-sm">{notification.text}</p>
-                        <p className="text-xs text-muted-foreground mt-1">{notification.time}</p>
-                      </div>
-                    ))}
-                  </div>
-                </PopoverContent>
-              </Popover>
-              
-              <ThemeToggle />
-              
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Link to="/" className="w-full">Back to Website</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </header>
+          <AdminHeader notifications={notifications} />
 
           {/* Main Content */}
           <div className="flex-1 overflow-auto p-4 lg:p-6">
@@ -207,7 +129,7 @@ const AdminLayout = () => {
   );
 };
 
-// New SidebarToggleButton component to handle the toggle functionality
+// SidebarToggleButton component to handle the toggle functionality
 const SidebarToggleButton = () => {
   const { toggleSidebar, state } = useSidebar();
   const isExpanded = state === "expanded";

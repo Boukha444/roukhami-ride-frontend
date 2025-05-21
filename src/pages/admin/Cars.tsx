@@ -21,71 +21,172 @@ const initialCars = [
     name: "Dacia Logan", 
     type: "Manual", 
     status: "Available", 
-    mileage: "12,500 km" 
+    mileage: "12,500 km",
+    transmission: "Manual",
+    quantity: 3,
+    fuelType: "Essence",
+    dailyRate: 30,
+    category: "Economy",
+    description: "Economical car perfect for city driving.",
+    isAvailable: true,
+    image: null
   },
   { 
     id: 2, 
     name: "Renault Clio", 
     type: "Automatic", 
     status: "Rented", 
-    mileage: "8,200 km" 
+    mileage: "8,200 km",
+    transmission: "Automatic",
+    quantity: 2,
+    fuelType: "Diesel",
+    dailyRate: 35,
+    category: "Compact",
+    description: "Compact and fuel-efficient, ideal for city use.",
+    isAvailable: false,
+    image: null
   },
   { 
     id: 3, 
     name: "Peugeot 208", 
     type: "Manual", 
     status: "Available", 
-    mileage: "15,700 km" 
+    mileage: "15,700 km",
+    transmission: "Manual",
+    quantity: 4,
+    fuelType: "Essence",
+    dailyRate: 32,
+    category: "Compact",
+    description: "Stylish and comfortable small car.",
+    isAvailable: true,
+    image: null
   },
   { 
     id: 4, 
     name: "Citroen C3", 
     type: "Automatic", 
     status: "Rented", 
-    mileage: "5,900 km" 
+    mileage: "5,900 km",
+    transmission: "Automatic",
+    quantity: 1,
+    fuelType: "Diesel",
+    dailyRate: 38,
+    category: "Compact",
+    description: "Unique design and comfortable ride.",
+    isAvailable: false,
+    image: null
   },
   { 
     id: 5, 
     name: "Volkswagen Golf", 
     type: "Manual", 
     status: "Available", 
-    mileage: "20,300 km" 
+    mileage: "20,300 km",
+    transmission: "Manual",
+    quantity: 2,
+    fuelType: "Diesel",
+    dailyRate: 40,
+    category: "Compact",
+    description: "German engineering with excellent build quality.",
+    isAvailable: true,
+    image: null
   },
 ];
 
 const Cars = () => {
   const [cars, setCars] = useState(initialCars);
-  const [isAddCarDialogOpen, setIsAddCarDialogOpen] = useState(false);
-
-  const toggleStatus = (id: number) => {
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
+  const [currentCar, setCurrentCar] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
+  
+  const toggleStatus = (id) => {
     setCars(cars.map(car => 
       car.id === id 
         ? { 
             ...car, 
-            status: car.status === "Available" ? "Rented" : "Available" 
+            status: car.status === "Available" ? "Rented" : "Available",
+            isAvailable: car.status === "Available" ? false : true
           } 
         : car
     ));
   };
 
-  const handleAddCar = (data: any) => {
+  const handleAddCar = (data) => {
     const newCar = {
       id: cars.length + 1,
       name: data.name,
       type: data.transmission,
       status: data.isAvailable ? "Available" : "Not Available",
-      mileage: "0 km"
+      mileage: "0 km",
+      transmission: data.transmission,
+      quantity: data.quantity,
+      fuelType: data.fuelType,
+      dailyRate: data.dailyRate,
+      category: data.category,
+      description: data.description,
+      isAvailable: data.isAvailable,
+      image: data.image || null
     };
     setCars([...cars, newCar]);
-    setIsAddCarDialogOpen(false);
+    setIsFormDialogOpen(false);
     toast.success(`${data.name} added successfully!`);
+  };
+
+  const handleUpdateCar = (data) => {
+    setCars(cars.map(car => 
+      car.id === currentCar.id 
+        ? { 
+            ...car,
+            name: data.name,
+            type: data.transmission,
+            status: data.isAvailable ? "Available" : "Not Available",
+            transmission: data.transmission,
+            quantity: data.quantity,
+            fuelType: data.fuelType,
+            dailyRate: data.dailyRate,
+            category: data.category,
+            description: data.description,
+            isAvailable: data.isAvailable,
+            image: data.image
+          } 
+        : car
+    ));
+    setIsFormDialogOpen(false);
+    setCurrentCar(null);
+    setIsEditMode(false);
+    toast.success(`${data.name} updated successfully!`);
+  };
+
+  const handleEditCar = (car) => {
+    setCurrentCar(car);
+    setIsEditMode(true);
+    setIsFormDialogOpen(true);
+  };
+
+  const handleOpenAddForm = () => {
+    setCurrentCar(null);
+    setIsEditMode(false);
+    setIsFormDialogOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setIsFormDialogOpen(false);
+    setCurrentCar(null);
+    setIsEditMode(false);
+  };
+
+  const handleDeleteCar = (id) => {
+    if (window.confirm("Are you sure you want to delete this car?")) {
+      setCars(cars.filter(car => car.id !== id));
+      toast.success("Car deleted successfully!");
+    }
   };
 
   return (
     <div className="p-4 sm:p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold">Cars</h1>
-        <Button onClick={() => setIsAddCarDialogOpen(true)}>
+        <Button onClick={handleOpenAddForm}>
           <Plus className="mr-2 h-4 w-4" />
           Add New Car
         </Button>
@@ -135,10 +236,18 @@ const Cars = () => {
                     >
                       {car.status === "Available" ? "Rent" : "Available"}
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => handleEditCar(car)}
+                    >
                       <Pencil className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon">
+                    <Button 
+                      variant="ghost" 
+                      size="icon"
+                      onClick={() => handleDeleteCar(car.id)}
+                    >
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -149,16 +258,20 @@ const Cars = () => {
         </Table>
       </div>
 
-      {/* Add Car Dialog */}
-      <Dialog open={isAddCarDialogOpen} onOpenChange={setIsAddCarDialogOpen}>
+      {/* Car Form Dialog */}
+      <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
         <DialogContent className="sm:max-w-[90%] md:max-w-[800px] p-0 sm:p-6">
           <DialogHeader className="p-6 sm:p-0">
-            <DialogTitle className="text-xl">Add New Car</DialogTitle>
+            <DialogTitle className="text-xl">
+              {isEditMode ? "Edit Car" : "Add New Car"}
+            </DialogTitle>
           </DialogHeader>
           <div className="overflow-y-auto max-h-[80vh] px-6 pb-6 sm:px-0 sm:pb-0">
             <AddCarForm 
-              onClose={() => setIsAddCarDialogOpen(false)} 
-              onSubmit={handleAddCar} 
+              onClose={handleCloseForm} 
+              onSubmit={isEditMode ? handleUpdateCar : handleAddCar}
+              isEditMode={isEditMode}
+              carData={currentCar}
             />
           </div>
         </DialogContent>
