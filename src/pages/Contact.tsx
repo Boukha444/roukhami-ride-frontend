@@ -1,5 +1,6 @@
+
 import { useState } from "react";
-import { MapPin, Phone, Mail, Clock, MessageSquare, CheckCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, MessageSquare, MessageSquareText } from "lucide-react";
 import { toast } from "sonner";
 
 const Contact = () => {
@@ -31,16 +32,33 @@ const Contact = () => {
 
   return (
     <>
-      {/* Enhanced Page Header with Dark Background */}
-      <section className="bg-gray-900 text-white py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 opacity-90"></div>
-        <div className="container-custom relative z-10">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-white via-gray-100 to-blue-100 bg-clip-text text-transparent">
-            Contact
-          </h1>
-          <p className="text-lg max-w-2xl text-gray-200">
-            Besoin d'aide ou d'informations ? Nous sommes là pour vous. Contactez-nous par téléphone, e-mail ou en utilisant notre formulaire.
-          </p>
+      {/* Enhanced Page Header with Background Image and Glassmorphism */}
+      <section className="relative h-[400px] md:h-[500px] overflow-hidden flex items-center justify-center">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+          style={{ 
+            backgroundImage: `url('https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2070&auto=format&fit=crop')`,
+            backgroundPosition: "center 40%"
+          }}
+        >
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+        
+        {/* Glassmorphism Container */}
+        <div className="container-custom relative z-10 max-w-4xl mx-auto">
+          <div className="backdrop-blur-md bg-black/30 rounded-xl p-8 md:p-10 border border-white/10 shadow-lg transform transition-all">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <MessageSquareText className="h-8 w-8 text-roukhami-blue" />
+              <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white via-gray-100 to-blue-100 bg-clip-text text-transparent">
+                Contact
+              </h1>
+            </div>
+            <div className="w-24 h-1 bg-roukhami-blue mx-auto mb-6 rounded-full"></div>
+            <p className="text-lg max-w-2xl mx-auto text-gray-200 text-center">
+              Besoin d'aide ou d'informations ? Nous sommes là pour vous. Contactez-nous par téléphone, e-mail ou en utilisant notre formulaire.
+            </p>
+          </div>
         </div>
       </section>
       
