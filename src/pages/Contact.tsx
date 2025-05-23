@@ -77,7 +77,7 @@ const Contact = () => {
                     <h3 className="font-semibold mb-1">Adresse</h3>
                     <p className="text-gray-700 dark:text-gray-300">
                       123 Rue Mohammed V<br />
-                      Casablanca, 20000<br />
+                      Agadir, 80000<br />
                       Maroc
                     </p>
                   </div>
@@ -127,7 +127,7 @@ const Contact = () => {
                 <div className="h-[300px] rounded-lg overflow-hidden">
                   <iframe
                     title="ROUKHAMI CAR Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d106376.72692355927!2d-7.6899661228027335!3d33.57240999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xda7cd4778aa113b%3A0xb06c1d84f310fd3!2sCasablanca%2C%20Morocco!5e0!3m2!1sen!2sus!4v1715975781927!5m2!1sen!2sus"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d111011.84218855066!2d-9.648641522949226!3d30.42206176947624!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdb3b6e9daef5d97%3A0x88c10e129a4c511f!2sAgadir%2C%20Morocco!5e0!3m2!1sen!2sus!4v1716989592890!5m2!1sen!2sus"
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
